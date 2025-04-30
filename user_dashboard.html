@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Dashboard</h2>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>My Borrow Requests</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Book Title</th>
+                                <th>Request Date</th>
+                                <th>Status</th>
+                                <th>Due date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in borrow_requests %}
+                            <tr>
+                                <td>{{ request.book.title }}</td>
+                                <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'info' if request.status == 'returned' else 'success' if request.status == 'approved' else 'danger' if request.status == 'rejected' else 'warning' }}">
+                                        {{ request.status }}
+                                    </span>
+                                <td>{{ request.due_date.strftime('%Y-%m-%d') if request.due_date else 'N/A' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

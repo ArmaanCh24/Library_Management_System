@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .background-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: url('{{ url_for('static', filename='images/background.png') }}');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.95;
+    }
+    
+    .jumbotron {
+        background-color: rgba(255, 255, 255, 0.65) !important;
+        backdrop-filter: blur(2px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .card {
+        background-color: rgba(255, 255, 255, 0.65) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="background-overlay"></div>
+
+<div class="container mt-4">
+    <!-- Jumbotron with matching opacity -->
+    <div class="jumbotron text-center mb-4 p-5 rounded-4 shadow-lg">
+        <h1 class="display-4 fw-bold mb-4" style="letter-spacing: 1.5px; color: #2c3e50;">Welcome to The Bookshelf</h1>
+        <p class="lead fs-4 text-muted">Discover thousands of books across various genres</p>
+    </div>
+
+    <!-- Recently Added -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4 text-dark border-bottom pb-2">Recently Added</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for book in recent %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0">  
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold text-primary">{{ book.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                            <p class="card-text flex-grow-1 text-secondary">{{ book.description[:100] }}...</p>
+                            <span class="badge bg-info mb-2">{{ book.genre }}</span>
+                            <div class="mt-auto"> 
+                                <a href="{{ url_for('book_details', book_id=book.id) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-book-open me-2"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Browse by Category -->
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4 text-dark border-bottom pb-2">Browse by Category</h2>
+            <div class="row row-cols-2 row-cols-md-4 g-4">
+                {% for genre in genres %}
+                <div class="col">
+                    <a href="{{ url_for('books', genre=genre[0]) }}" class="text-decoration-none">
+                        <div class="card text-center h-100 shadow-sm border-0 hover-effect">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-success">{{ genre[0] }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

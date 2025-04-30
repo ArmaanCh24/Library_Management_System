@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            {% if book.image_filename %}
+                <img src="{{ url_for('static', filename='uploads/' + book.image_filename) }}" class="img-fluid rounded" alt="Book Image">
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/default.jpg') }}" class="img-fluid rounded" alt="No Image Available">
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h3 class="card-title">{{ book.title }}</h3>
+                <h5 class="text-muted">by {{ book.author }}</h5>
+                <p><strong>Genre:</strong> {{ book.genre }}</p>
+                <p><strong>Description:</strong> {{ book.description }}</p>
+                <p><strong>Available Copies:</strong> {{ book.available_copies }}</p>
+
+                {% if current_user.is_authenticated and not current_user.is_admin and not current_user.is_banned %}
+                    <form method="POST" action="{{ url_for('borrow_book', book_id=book.id) }}">
+                        <button type="submit" class="btn btn-success" {% if book.available_copies < 1 %}disabled{% endif %}>
+                            Request to Borrow
+                        </button>
+                    </form>
+                {% endif %}
+
+                <a href="{{ url_for('books') }}" class="btn btn-secondary mt-3">Back to Books</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

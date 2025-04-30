@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            {% if book.img_filename %}
+                <img src="{{ url_for('static', filename='uploads/' + book.img_filename) }}" class="img-fluid rounded" alt="Book Image">
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/default.jpg') }}" class="img-fluid rounded" alt="No Image Available">
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h3 class="card-title">{{ book.name }}</h3>
+                <h5 class="text-muted">by {{ book.author }}</h5>
+                <p><strong>Course:</strong> {{ book.course }}</p>
+                <p><strong>Description:</strong> {{ book.description }}</p>
+
+                {% if current_user.is_authenticated and not current_user.is_admin %}
+                    <a href="{{ url_for('static', filename='files/' + book.pdf_file) }}" target="_blank" class="btn btn-success">
+                        Read Book
+                    </a>
+                {% endif %}
+
+                <a href="{{ url_for('ebooks') }}" class="btn btn-secondary mt-3">Back to Ebooks</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

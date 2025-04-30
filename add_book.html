@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Add a New Book</h4>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="author" name="author" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="genre" class="form-label">Genre</label>
+                        <input type="text" class="form-control" id="genre" name="genre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="total_copies" class="form-label">Total Copies</label>
+                        <input type="number" class="form-control" id="total_copies" name="total_copies" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="available_copies" class="form-label">Available Copies</label>
+                        <input type="number" class="form-control" id="available_copies" name="available_copies" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload Book Image</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Add Book</button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p><a href="{{ url_for('add_ebook') }}">Add Ebook</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

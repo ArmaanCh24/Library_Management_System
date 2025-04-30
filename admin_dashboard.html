@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Pending Borrow Requests</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Book</th>
+                                <th>Request Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in pending_requests %}
+                            <tr>
+                                <td>{{ request.user.name }}</td>
+                                <td>{{ request.book.title }}</td>
+                                <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    <a href="{{ url_for('handle_request', request_id=request.id, action='approve') }}" 
+                                       class="btn btn-success btn-sm">Approve</a>
+                                    <a href="{{ url_for('handle_request', request_id=request.id, action='reject') }}" 
+                                       class="btn btn-danger btn-sm">Reject</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Add this after the Pending Borrow Requests card -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h3>Currently Borrowed Books</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Book</th>
+                        <th>Borrow Date</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in borrowed_books %}
+                    <tr>
+                        <td>{{ request.user.name }}</td>
+                        <td>{{ request.book.title }}</td>
+                        <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ request.due_date.strftime('%Y-%m-%d') if request.due_date else 'N/A' }}</td>
+                        <td>
+                            <form action="{{ url_for('admin_return_book', request_id=request.id) }}" method="POST">
+                                <button type="submit" class="btn btn-warning btn-sm">Mark Returned</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Manage Books</h3>
+                
+                <a href="{{ url_for('add_book') }}" >
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <h3 class="card-header">Books</h3>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Available/Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                            <tr>
+                                <td>{{ book.title }}</td>
+                                <td>{{ book.author }}</td> 
+                                <td>{{ book.genre }}</td>
+                                <td>{{ book.available_copies }}/{{ book.total_copies }}</td>
+                                
+                                    <td>
+                                        <a href="{{ url_for('edit_book', book_id=book.id) }}" 
+                                           class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm" 
+                                                    onclick="return confirm('Are you sure you want to delete this book?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <h3 class="card-header">E Books</h3>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th></th>
+                                <th></th>
+                                <th>Author</th>
+                                <th></th>
+                                <th></th>
+                                <th>Course</th>
+                                
+                                
+                                
+                                
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in ebooks %}
+                            <tr>
+                                <td>{{ b.name }}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ b.author }}</td> 
+                                <td></td>
+                                <td></td>
+                                <td>{{ b.course }}</td>
+                               
+                                
+                                
+                                
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                
+                                <td>
+                                    <a href="{{ url_for('edit_ebook', book_id=b.id) }}" 
+                                    class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                    <form action="{{ url_for('delete_ebook', book_id=b.id) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Are you sure you want to delete this ebook?');">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+       
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Manage Users</h3>
+                
+                <a href="{{ url_for('add_user') }}" >
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th> <!-- New column for delete button -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'primary' if user.is_admin else 'secondary' }}">
+                                        {{ 'Admin' if user.is_admin else 'User' }}
+                                        
+                                    </span>
+                                    {% if user.is_banned %}
+        <span class="badge bg-danger">Banned</span>
+    {% endif %}
+                                </td>
+                                <td>
+                                    <!-- Delete User Button -->
+                                    <form action="{{ url_for('delete_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Are you sure you want to delete this user?');">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    {% if not user.is_banned %}
+    <form action="{{ url_for('ban_user', user_id=user.id) }}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-danger btn-sm" 
+                onclick="return confirm('Are you sure you want to ban this user?');">
+            <i class="fas fa-ban"></i> 
+        </button>
+    </form>
+    {% else %}
+    <form action="{{ url_for('unban_user', user_id=user.id) }}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-success btn-sm" 
+                onclick="return confirm('Are you sure you want to unban this user?');">
+            <i class="fas fa-check"></i> 
+        </button>
+    </form>
+    {% endif %}
+</td>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
