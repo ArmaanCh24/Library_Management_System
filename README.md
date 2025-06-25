@@ -1,10 +1,10 @@
 lms
-|-- static
+|- static
     |-- css
         files
         images(background_img)
         js
         uploads
-|-- templates
+|- templates
     |-- html templates
-|-- app.py
+|- app.py
